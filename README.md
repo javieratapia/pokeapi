@@ -1,4 +1,4 @@
-# pokeapi
+# Pokeapi
 
 ## Project setup
 ```
