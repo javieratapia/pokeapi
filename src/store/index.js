@@ -72,11 +72,15 @@ export default new Vuex.Store({
         .get(`https://pokeapi.co/api/v2/pokemon/${name}`)
         .then((response) => {
           let dataList = {};
+          let type = []
+          response.data.types.forEach(element => {
+            type.push(element.type.name)
+          });
           dataList = {
             name: response.data.name,
             weight: response.data.weight,
             height: response.data.height,
-            types: response.data.types,
+            types: type,
             image: response.data.sprites.other.dream_world.front_default,
           };
           commit("updateDataDetails", dataList);

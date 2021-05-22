@@ -23,7 +23,7 @@
         <li class="modal-data">
           <h3 class="list-title">Types:</h3>
           <p v-for="(item, index) in dataDetails.types" :key="index">
-            {{ item.type.name | capitalize }}
+            {{ item | capitalize }}
           </p>
         </li>
       </ul>
@@ -56,9 +56,9 @@ export default {
   computed: {
     ...mapState(["showModal", "dataDetails"]),
 
-    clipboard(){
-      return `Name: ${this.dataDetails.name}, Weight: ${this.dataDetails.weight}, Height: ${this.dataDetails.height}, Types: ${this.dataDetails.types[0].type.name}, ${this.dataDetails.types[1].type.name}`
-    }
+    clipboard() {
+      return `Name: ${this.dataDetails.name}, Weight: ${this.dataDetails.weight}, Height: ${this.dataDetails.height}, Types: ${this.dataDetails.types}`;
+    },
   },
   methods: {
     ...mapActions(["modalAction"]),
@@ -78,8 +78,7 @@ export default {
   top: 0;
   left: 0;
   z-index: 2;
-  color: #5E5E5E;
-;
+  color: #5e5e5e;
 }
 .modal-base {
   max-width: 570px;
@@ -111,7 +110,8 @@ export default {
 }
 
 .imagen-details {
-  width: 150px;
+  height: 150px;
+  width: auto;
 }
 .modal-list {
   list-style: none;
