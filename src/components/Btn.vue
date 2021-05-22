@@ -6,7 +6,12 @@
 
 <template>
   <div>
-    <router-link class="btn btn-text" :class="buttonStatus" :to="buttonRoute" :style="'width:'+buttonLarge">
+    <router-link
+      class="btn btn-text"
+      :class="buttonStatus"
+      :to="buttonRoute"
+      :style="'width:' + buttonLarge"
+    >
       <i :class="icon" class="margin-right"></i>
       {{ buttonName }}
     </router-link>
@@ -36,9 +41,9 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  display: inline-block;
   padding: 11px 20px;
   border-radius: 60px;
+  display: inline-block;
 }
 
 .btn-text {
@@ -67,5 +72,6 @@ export default {
 .disabled {
   background-color: #bfbfbf;
   cursor: default;
+  pointer-events: none;
 }
 </style>

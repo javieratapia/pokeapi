@@ -1,32 +1,45 @@
 <template>
-  <div class="modal-base">
-      <div>
+  <div class="modal-container" v-if="showModal">
+    <div class="modal-base">
+      <div class="modal-backgroud">
+        <div @click="modalAction(false)">
           <i class="fas fa-times-circle"></i>
+        </div>
+        <img :src="dataDetails.image" alt="Pokemon" class="imagen-details" />
       </div>
-    <div class="modal-backgroud">
-      <img
-        src="../assets/welcome-pikachu.svg"
-        alt="Pokemon"
-        class="imagen-size"
-      />
-    </div>
-    <div class="modal-list">
-      <span class="list-title"> Name: </span> {{ AttributeName }}
-      <div class="line"></div>
-      <span class="list-title"> Weight: </span> {{ AttributeWeight }}
-      <div class="line"></div>
-      <span class="list-title"> Height: </span> {{ AttributeHeight }}
-      <div class="line"></div>
-      <span class="list-title"> Types: </span>{{ AttributeTypes }}
-    </div>
-    <div class="modal-button">
-      <btn
-        class="modal-btn"
-        buttonName="Share to my friends"
-        buttonStatus="active"
-        buttonRoute="/home"
-      />
-      <btn-favorite class="modal-btn-favorite" buttonStatus="active" />
+      <ul class="modal-list">
+        <li class="modal-data">
+          <h3 class="list-title">Name:</h3>
+          <p>{{ dataDetails.name | capitalize }}</p>
+        </li>
+        <li class="modal-data">
+          <h3 class="list-title">Weight:</h3>
+          <p>{{ dataDetails.weight }}</p>
+        </li>
+        <li class="modal-data">
+          <h3 class="list-title">Height:</h3>
+          <p>{{ dataDetails.height }}</p>
+        </li>
+        <li class="modal-data">
+          <h3 class="list-title">Types:</h3>
+          <p v-for="(item, index) in dataDetails.types" :key="index">
+            {{ item.type.name | capitalize }}
+          </p>
+        </li>
+      </ul>
+      <div class="modal-button">
+        <btn
+          class="modal-btn"
+          buttonName="Share to my friends"
+          buttonStatus="active"
+          buttonRoute="/home"
+          v-clipboard:copy="clipboard"
+        />
+        <btn-favorite
+          class="modal-btn-favorite"
+          :buttonData="dataDetails.name"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -35,47 +48,96 @@
 import Btn from "./Btn.vue";
 import BtnFavorite from "./BtnFavorite.vue";
 
+import { mapState, mapActions } from "vuex";
+
 export default {
+  name: "Modal",
   components: { Btn, BtnFavorite },
-  props: {
-    AttributeName: String,
-    AttributeWeight: String,
-    AttributeHeight: String,
-    AttributeTypes: Array,
+  computed: {
+    ...mapState(["showModal", "dataDetails"]),
+
+    clipboard(){
+      return `Name: ${this.dataDetails.name}, Weight: ${this.dataDetails.weight}, Height: ${this.dataDetails.height}, Types: ${this.dataDetails.types[0].type.name}, ${this.dataDetails.types[1].type.name}`
+    }
+  },
+  methods: {
+    ...mapActions(["modalAction"]),
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  color: #5E5E5E;
+;
+}
 .modal-base {
-  display: inline-block;
-  width: 40%;
-  z-index: 1;
+  max-width: 570px;
+  width: 95%;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+  overflow: hidden;
 }
 .modal-backgroud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 220px;
 
   background-image: url("../assets/background.png");
   background-size: cover;
   background-position: bottom;
   background-repeat: no-repeat;
+  position: relative;
+  .fa-times-circle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #ffffff;
+    cursor: pointer;
+  }
 }
-.imagen-size {
-  width: 180px;
+
+.imagen-details {
+  width: 150px;
 }
 .modal-list {
-  display: inline-block;
+  list-style: none;
   text-align: start;
   width: 90%;
-  margin: 10px 0;
+  margin: 10px auto;
+  padding: 0;
 }
-.list-title {
-  font-weight: 700;
-}
-.line {
-  height: 1px;
-  background-color: #e8e8e8;
-  margin: 10px 0;
+.modal-data {
+  display: inline-block;
+  height: auto;
+  border-bottom: 1px solid #e8e8e8;
+  width: 100%;
+  &:last-child {
+    border-bottom: 1px solid transparent;
+  }
+  .list-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  p {
+    display: inline-block;
+    font-size: 18px;
+    margin: auto 4px;
+  }
 }
 .modal-button {
   display: inline-grid;
